@@ -1,0 +1,7 @@
+{
+    "exportall.config.relExclusion": [
+        "/src/products/entities"
+    ]
+   
+    
+}
