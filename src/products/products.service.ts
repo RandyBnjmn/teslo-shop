@@ -1,3 +1,4 @@
+import { use } from 'passport';
 import {
   BadRequestException,
   Injectable,
@@ -13,6 +14,7 @@ import { Product } from './entities/product.entity';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { validate as isUUID } from 'uuid';
 import { ProductImage } from './entities';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -27,14 +29,16 @@ export class ProductsService {
     private readonly dataSource: DataSource
   ) { }
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
 
       const { images = [], ...productProperties } = createProductDto
 
       const newProduct = this.productRepository.create({
         ...productProperties,
-        images: images.map((image) => this.productImageRepository.create({ url: image }))
+        images: images.map((image) => this.productImageRepository.create({ url: image })),
+        user: user
+
 
       });
       await this.productRepository.save(newProduct);
@@ -91,7 +95,7 @@ export class ProductsService {
   }
 
   //TODO:Pendiente implementar
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User) {
 
     const { images, ...rest } = updateProductDto;
 
@@ -100,7 +104,8 @@ export class ProductsService {
 
     const product = await this.productRepository.preload({
       id,
-      ...rest,
+      ...rest
+      ,
     });
 
     if (!product) throw new NotFoundException(`Product with id: ${id} not found`)
@@ -112,13 +117,6 @@ export class ProductsService {
     await queryRunner.startTransaction();
 
 
-
-
-
-
-
-
-
     try {
       if (images) {
         await queryRunner.manager.delete(ProductImage, { product: { id } })
@@ -127,6 +125,7 @@ export class ProductsService {
 
       }
 
+      product.user = user;
       await queryRunner.manager.save(product);
       await queryRunner.commitTransaction();
       await queryRunner.release();
