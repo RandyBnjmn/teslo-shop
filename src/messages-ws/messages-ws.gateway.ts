@@ -5,7 +5,7 @@ import { NewMessageDto } from './dtos/new-message.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/auth/interfaces/JwtPayload.interface';
 
-@WebSocketGateway(88, { cors: true })
+@WebSocketGateway({ cors: true })
 export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() webSocketServer: Server
