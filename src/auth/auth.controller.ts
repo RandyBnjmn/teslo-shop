@@ -8,9 +8,10 @@ import { GetRawHeaders } from './decorators/get-raw-header.decorator';
 import { UserRoleGuard } from './guards/user-role.guard';
 import { Auth, RoleProtected } from './decorators';
 import { ValidRoles } from './enums/valid-roles.enum';
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 
 
-
+@ApiTags("auth")
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
@@ -27,7 +28,7 @@ export class AuthController {
   }
 
 
-
+  @ApiBearerAuth()
   @Get("check-status")
   @Auth()
   checkStatus(
@@ -37,7 +38,7 @@ export class AuthController {
   }
 
 
-
+  @ApiExcludeEndpoint()
   @Get('private')
   @UseGuards(AuthGuard())
   checkPrivateRoute(
@@ -57,6 +58,8 @@ export class AuthController {
   }
 
 
+
+  @ApiExcludeEndpoint()
   @Get('private2')
   // @SetMetadata('roles', ["admin", "super-user"])
   @RoleProtected(ValidRoles.superUser)
@@ -72,6 +75,7 @@ export class AuthController {
   }
 
 
+  @ApiExcludeEndpoint()
   @Get('private3')
   @Auth(ValidRoles.admin)
   privateRoute3(

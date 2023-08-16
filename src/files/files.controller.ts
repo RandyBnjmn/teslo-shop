@@ -6,16 +6,20 @@ import { diskStorage } from 'multer';
 import { fileFilter, fileNamer } from './helpers';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators';
+import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
-
+@ApiBearerAuth()
+@ApiTags('files')
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService,
     private readonly configservice: ConfigService) { }
 
 
-
   @Get("product/:imageName")
+  @Auth(ValidRoles.admin)
   findProductImage(
     @Res() res: Response,
     @Param('imageName') imageName: string
@@ -29,6 +33,7 @@ export class FilesController {
 
 
   @Post("product")
+  @Auth(ValidRoles.admin)
   @UseInterceptors(FileInterceptor('file',
     {
       fileFilter: fileFilter,
