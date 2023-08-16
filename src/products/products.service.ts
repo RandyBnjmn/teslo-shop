@@ -52,7 +52,7 @@ export class ProductsService {
     const { limit = 10, offset = 0 } = paginationDto;
     const products = await this.productRepository.find({
       skip: offset,
-      take: offset,
+      take: limit,
       relations: {
         images: true
       }
