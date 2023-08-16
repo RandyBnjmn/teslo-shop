@@ -18,6 +18,15 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
+      ssl: process.env.POSTGRES_SSL === "true",
+      extra: {
+        ssl:
+          process.env.POSTGRES_SSL === "true"
+            ? {
+              rejectUnauthorized: false,
+            }
+            : null,
+      },
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -31,4 +40,4 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
