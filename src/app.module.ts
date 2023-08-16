@@ -29,6 +29,15 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
       },
       autoLoadEntities: true,
       synchronize: true,
+      ssl: process.env.POSTGRES_SSL === "true",
+      extra: {
+        ssl:
+          process.env.POSTGRES_SSL === "true"
+            ? {
+                rejectUnauthorized: false,
+              }
+            : null,
+      },
     }),
     ProductsModule,
     CommonModule,

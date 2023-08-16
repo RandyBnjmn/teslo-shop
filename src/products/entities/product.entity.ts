@@ -71,14 +71,14 @@ export class Product {
     }
 
     this.slug = this.slug
-      .toLowerCase()
+      .toLocaleLowerCase()
       .replaceAll(' ', '_')
       .replaceAll("'", '');
   }
   @BeforeUpdate()
   checkSlugUpdate() {
     this.slug = this.slug
-      .toLowerCase()
+      .toLocaleLowerCase()
       .replaceAll(' ', '_')
       .replaceAll("'", '');
   }
