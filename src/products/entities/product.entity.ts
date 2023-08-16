@@ -71,15 +71,15 @@ export class Product {
     }
 
     this.slug = this.slug
-      .toLocaleLowerCase()
-      ?.replaceAll(' ', '_')
-      ?.replaceAll("'", '');
+      .toLocaleLowerCase().toString()
+      .replaceAll(' ', '_')
+      .replaceAll("'", '');
   }
   @BeforeUpdate()
   checkSlugUpdate() {
     this.slug = this.slug
-      .toLocaleLowerCase()
-      ?.replaceAll(' ', '_')
-      ?.replaceAll("'", '');
+      .toLocaleLowerCase().toString()
+      .replaceAll(' ', '_')
+      .replaceAll("'", '');
   }
 }
