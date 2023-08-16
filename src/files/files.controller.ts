@@ -7,8 +7,9 @@ import { fileFilter, fileNamer } from './helpers';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Auth } from 'src/auth/decorators';
+import { Auth, GetUser } from 'src/auth/decorators';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { User } from 'src/auth/entities/user.entity';
 
 @ApiBearerAuth()
 @ApiTags('files')
@@ -21,6 +22,7 @@ export class FilesController {
   @Get("product/:imageName")
   @Auth(ValidRoles.admin)
   findProductImage(
+    @GetUser() user: User,
     @Res() res: Response,
     @Param('imageName') imageName: string
   ) {
